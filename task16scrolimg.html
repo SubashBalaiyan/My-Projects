@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <style>
+        #currentImage {
+            width: 400px;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+            
+        }
+        #slider {
+            display: flex;
+            overflow-x: scroll; 
+            gap: 10px; 
+        }
+        img {
+            height: 100px;
+            width: 150px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <img id="currentImage" src="img_1.jpg" alt="Current Image">
+    <div id="slider">
+        <img src="img_1.jpg" alt="Image 1">
+        <img src="img_2.jpg" alt="Image 2">
+        <img src="img_3.jpg" alt="Image 3">
+        <img src="img_4.jpg" alt="Image 4">
+        <img src="img_5.jpg" alt="Image 5">
+        <img src="img_6.jpg" alt="Image 6">
+        <img src="img_7.jpg" alt="Image 7">
+        <img src="img_8.jpg" alt="Image 8">
+        <img src="img_9.jpg" alt="Image 9">
+        <img src="img_10.jpg" alt="Image 10">
+    </div>
+
+    <script>
+        const currentImage = document.getElementById("currentImage");
+        const sliderImages = document.querySelectorAll("#slider img");
+
+        sliderImages.forEach((img) => {
+            img.addEventListener("click", () => {
+                currentImage.src = img.src; 
+               });
+        });
+    </script>
+</body>
+</html>

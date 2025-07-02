@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <style>
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: #9de2f1;
+        }
+        #amount {
+            width: 92%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f1baf1;
+        }
+        select {
+            width: 45%;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: #f1baf1;
+        }
+        button {
+            width: 50%;
+            padding: 10px;
+            background-color: #c206b2;
+            color: white;
+           align-items: center;
+            text-align: center;
+            font-size: 17px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+       </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <label for="amount">Amount:</label>
+        <br>
+        <input type="number" id="amount" placeholder="Enter amount">
+        <br>
+        <select id="display1">
+            <option value="">From</option>
+        </select>
+        <select id="display2">
+            <option value="">To</option>
+        </select>
+        <br>
+             <button id="convert">Convert</button>
+            <p id="result"></p>
+        </div>
+    <script>
+        fetch(`https://api.frankfurter.app/currencies`)
+            .then(response => response.json())
+            .then(data => {
+                const display1 = document.getElementById('display1');
+                const display2 = document.getElementById('display2');
+                const options = Object.keys(data).map(currency => `<option value="${currency}">${currency}</option>`).join('');
+                display1.innerHTML += options;
+                display2.innerHTML += options;
+            });
+
+        document.getElementById('convert').addEventListener('click', () => {
+            const fromCurrency = document.getElementById('display1').value;
+            const toCurrency   = document.getElementById('display2').value;
+            const amount       = document.getElementById('amount').value;
+
+            if (fromCurrency && toCurrency && amount) {
+                fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('result').innerText = 
+                            `${amount} ${fromCurrency} = ${data.rates[toCurrency]} ${toCurrency}`;
+                    })
+                    .catch(error => {
+                        document.getElementById('result').innerText = "Error in conversion. Please try again.";
+                        console.error(error);
+                    });
+            } else {
+                document.getElementById('result').innerText = "Please fill in all fields.";
+            }
+        });
+    </script>
+</body>
+</html>

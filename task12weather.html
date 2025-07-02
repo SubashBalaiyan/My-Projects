@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #333;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .weather-info {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        .weather-info h2 {
+            margin: 0;
+            color: #007bff;
+        }
+        .weather-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="cityInput" placeholder="Enter city name" />
+    <button onclick="getWeatherData()">Search</button>
+    <div id="weatherInfo" class="weather-info" style="display: none;">
+        <h2 id="cityName"></h2>
+        <p id="temperature"></p>
+        <p id="humidity"></p>
+        <p id="description"></p>
+    </div>
+
+    <script>
+        function getWeatherData() {
+            const city = document.getElementById("cityInput").value;
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=b1321907baf0bdf02fe79281ba1f9be7&units=metric`;
+
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        document.getElementById("weatherInfo").style.display = "none";
+                        alert("City not found or an error occurred.");
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        document.getElementById("cityName").textContent = data.name;
+                        document.getElementById("temperature").textContent = `Temperature: ${data.main.temp} °C`;
+                        document.getElementById("humidity").textContent = `Humidity: ${data.main.humidity} %`;
+                        document.getElementById("description").textContent = `Weather: ${data.weather[0].description}`;
+                        document.getElementById("weatherInfo").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    alert("An error occurred while fetching the data.");
+                    document.getElementById("weatherInfo").style.display = "none";
+                });
+        }
+    </script>
+</body>
+</html>
